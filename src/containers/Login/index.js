@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 import InputWithValidation from "../../components/InputWithValidation";
 import styles from "./style";
 import { Formik } from "formik";
@@ -10,6 +10,7 @@ const Login = () => {
   const classes = styles();
   const history = useHistory();
   const users = useSelector(({ users }) => users);
+  const [error, setErorr] = React.useState(false);
   return (
     <Formik
       initialValues={{
@@ -25,10 +26,10 @@ const Login = () => {
             localStorage.setItem("isAuthenticated", loginUser.name);
             history.push("/");
           } else {
-            console.log("wrong pass");
+            setErorr(true);
           }
         } else {
-          console.log("user does not exist");
+          setErorr(true);
         }
       }}
     >
@@ -55,6 +56,11 @@ const Login = () => {
         return (
           <Grid container style={{ justifyContent: "center" }}>
             <Grid item xs={5}>
+              {error && (
+                <Typography style={{ color: "red" }} align="center">
+                  Wrong credentials, please try again
+                </Typography>
+              )}
               <form onSubmit={handleSubmit} autocomplete="off">
                 <InputWithValidation
                   field="user_name"
